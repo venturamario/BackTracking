@@ -1,0 +1,93 @@
+//-----------------------ALGORITMO RECURSIVO----------------------
+
+
+//-----------TODAS LAS SOLUCIONES PARA N REINAS-----------
+func nReinas(t: tablero, etapa: entero) returns (soluciones: tableros)
+{
+BEGIN
+	Tipus tableros = array[1..numSoluciones] of tablero;
+	Var soluciones: tableros;
+	Var ind,numSoluciones: entero;
+	Var haySolucion: booleano
+	ind:=0;	
+	numSoluciones:=0
+
+	FOR i:=1 to numReinas DO BEGIN
+		IF t.isValido THEN BEGIN	      //Estado actual aceptable
+			t.colocarReina(fila,columna); //Anotar solucion
+			IF etapa<numReinas THEN	      //Solucion incompleta?
+				nReinas(t,etapa+1);   //Siguiente etapa
+			ELSE BEGIN
+				//Solucion encontrada, se guarda y se sigue
+				soluciones[ind]:=t;
+				numSoluciones:=numSoluciones+1;
+				ind:=ind+1;
+				//Volver al estado anterior
+				t.eliminarReina(fila,columna);
+			END IF
+		END IF
+	END FOR
+
+	IF numSoluciones > 0 THEN
+		haySolucion:= true;
+		Var n: entero
+		n:=preguntarSolucion;
+		imprimirSolucion(soluciones[n]);
+	ELSE THEN
+		haySolucion:=false;
+END	
+}
+
+
+
+
+//-----------1 SOLUCIÓN DADA POSICION INICIAL-----------
+func nReinasPI(t: tablero, etapa: entero) returns (t': tablero)
+{
+BEGIN
+	Var f,c: entero;
+	Var haySolucion: booleano
+	f:=preguntarFila();
+	c:=preguntarColumna();
+	
+	//Colocar reina en posición inicial
+	t.colocarReina(f,c);
+	etapa:=etapa+1;
+
+	//Llenar el resto del tablero en búsqueda de una solución
+	FOR i:=1 to (numReinas-1) DO BEGIN
+		IF t.isValido THEN BEGIN	        	//Estado actual aceptable
+			t.colocarReina(fila,columna);   	//Anotar solucion
+			IF etapa<numReinas THEN	        	//Solucion incompleta?
+				nReinasPI(t,etapa+1);   	//Siguiente etapa
+			ELSE BEGIN
+				//Solucion encontrada
+				haySolucion:= true;
+			END IF
+		END IF
+	END FOR
+
+	IF haySolucion = true THEN
+		imprimirTablero(t);
+	ELSE THEN
+		aviso("NO SE HA ENCONTRADO SOLUCIÓN");
+END
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
