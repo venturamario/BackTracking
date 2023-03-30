@@ -1,3 +1,3 @@
 # BackTracking
 
-BackTracking exercises solved with Java
+Classic BackTracking exercise solved with Java
